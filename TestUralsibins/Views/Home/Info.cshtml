@@ -2,25 +2,26 @@
 @{
     ViewBag.Title = "Info";
 }
-
-<h2>Info</h2>
+<div class="jumbotron">
+    <h2>Загруженные файлы</h2>
+</div>
 <table class="table">
     <thead>
         <tr>
-            <th></th>
             <th>Имя</th>
             <th>Размер</th>
             <th>Дата</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
         @foreach (var file in Model)
-        {
+            {
             <tr>
-                <td>@file.Id</td>
                 <td>@file.Name</td>
                 <td>@file.Size</td>
                 <td>@file.Date</td>
+                <td><a href=@("/Files/" + file.Id  + System.IO.Path.GetExtension(file.Name)) download>Скачать</a></td>
             </tr>
         }
     </tbody>

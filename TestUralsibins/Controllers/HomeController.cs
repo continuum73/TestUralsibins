@@ -15,30 +15,44 @@ namespace TestUralsibins.Controllers
         }
         public ActionResult Info()
         {
-            using (var db = new FileContext())
+            try
             {
-                return View(db.Files.ToArray());
+                using (var db = new FileContext())
+                {
+                    return View(db.Files.ToArray());
+                }
+            }
+            catch (Exception ex)
+            {
+                return View(viewName: "Error", model: ex.ToString());
             }
         }
         public ActionResult Upload(IEnumerable<HttpPostedFileBase> upload)
         {
             if (upload != null)
             {
-                using (var db = new FileContext())
+                try
                 {
-                    foreach (var upfile in upload)
+                    using (var db = new FileContext())
                     {
-                        string fileName = System.IO.Path.GetFileName(upfile.FileName);
-                        File file = new File
+                        foreach (var upfile in upload)
                         {
-                            Name = fileName,
-                            Size = upfile.ContentLength,
-                            Date = DateTime.Now
-                        };
-                        db.Files.Add(file);
-                        db.SaveChanges();
-                        upfile.SaveAs(Server.MapPath("~/Files/" + file.Id + System.IO.Path.GetExtension(upfile.FileName)));
+                            string fileName = System.IO.Path.GetFileName(upfile.FileName);
+                            File file = new File
+                            {
+                                Name = fileName,
+                                Size = upfile.ContentLength,
+                                Date = DateTime.Now
+                            };
+                            db.Files.Add(file);
+                            db.SaveChanges();
+                            upfile.SaveAs(Server.MapPath("~/Files/" + file.Id + System.IO.Path.GetExtension(upfile.FileName)));
+                        }
                     }
+                }
+                catch (Exception ex)
+                {
+                    return View(viewName: "Error", model: ex.ToString());
                 }
             }
             return RedirectToAction("Index");
