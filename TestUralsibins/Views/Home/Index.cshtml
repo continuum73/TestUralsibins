@@ -1,0 +1,17 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron">
+    <h1>Загрузть новый файл</h1>
+</div>
+
+<div>
+    <p>Выберите один или несколько файлов для загрузки</p>
+    @using (Html.BeginForm("Upload", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <input type="file" name="upload" required multiple /><br>
+        <input type="submit" value="Загрузить" />
+    }
+
+</div>
