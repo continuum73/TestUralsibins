@@ -29,10 +29,16 @@ namespace TestUralsibins.Controllers
                     foreach (var upfile in upload)
                     {
                         string fileName = System.IO.Path.GetFileName(upfile.FileName);
-                        db.Files.Add(new File() { Name = fileName, Size = upfile.ContentLength, Date = DateTime.Now });
-                        upfile.SaveAs(Server.MapPath("~/Files/" + fileName));
+                        File file = new File
+                        {
+                            Name = fileName,
+                            Size = upfile.ContentLength,
+                            Date = DateTime.Now
+                        };
+                        db.Files.Add(file);
+                        db.SaveChanges();
+                        upfile.SaveAs(Server.MapPath("~/Files/" + file.Id + System.IO.Path.GetExtension(upfile.FileName)));
                     }
-                    db.SaveChanges();
                 }
             }
             return RedirectToAction("Index");
